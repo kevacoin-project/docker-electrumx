@@ -21,6 +21,26 @@ If there's an SSL certificate/key (`electrumx.crt`/`electrumx.key`) in the `/dat
 
 You can view all ElectrumX environment variables here: https://github.com/spesmilo/electrumx/blob/master/docs/environment.rst
 
+### Compact History
+
+If you encounter error like this:
+
+```
+struct.error: 'H' format requires 0 <= number <= 65535
+```
+It is time to compact the history of the database by running the `electrumx_compact_history` script:
+
+```
+docker run \
+  --add-host=host.docker.internal:host-gateway \
+  -v /home/<your username>/electrumx:/data \
+  -e DAEMON_URL=http://<kevacoind username>:<kevacoind password>@<kevacoid ip>:<rpc port> \
+  -e DB_ENGINE=rocksdb \
+  -p 50001:50001 \
+  kevacoin-project/electrumx \
+  /electrumx/electrumx_compact_history
+```
+
 ### TCP Port
 
 By default only the SSL port is exposed. You can expose the unencrypted TCP port with `-p 50001:50001`, although this is strongly discouraged.
